@@ -46,7 +46,7 @@ void main(){
   float b=dot(ro,rd),c=dot(ro,ro)-1.69,dm=sqrt(max(dot(ro,ro)-b*b,0.));
   vec3 col=mix(vec3(.05,.025,.012),vec3(.004,.002,.004),smoothstep(0.,.7,length(uv)));
   // Background: dark vignette plus an orange halo with slowly rotating rays.
-  float ang=atan(uv.y,uv.x),rays=.65+.35*sin(ang*13.+uTime*.6)*sin(ang*5.-uTime*.4),ex=max(dm-1.05,0.);col+=vec3(1.,.5,.12)*exp(-ex*4.5)*.55*rays+vec3(1.,.8,.4)*exp(-ex*14.)*.5;vec3 bgc=col;
+  float ang=atan(uv.y,uv.x),rays=.65+.35*sin(ang*13.+uTime*.6)*sin(ang*5.-uTime*.4),ex=max(dm-1.05,0.); float w1=.5+.5*sin(ang*7.-uTime*.25); float w2=.5+.5*sin(ang*11.+uTime*.18); vec3 glow=mix(vec3(1.,.02,.35),vec3(.25,.03,1.),w1); glow=mix(glow,vec3(0.,1.,.75),w2*.55); glow=mix(glow,vec3(1.,.8,.02),.22*(.5+.5*sin(ang*17.-uTime*.15))); col+=glow*exp(-ex*4.5)*.72*rays; col+=glow*exp(-ex*12.)*.28; vec3 bgc=col;
   float disc=b*b-c;
   if(disc>0.){
     // March from the sphere entry point. pw is the pixel footprint per unit distance;
@@ -68,12 +68,12 @@ void main(){
       // Eye layout on the sphere: th is the polar angle from +z. Inside uPupil it is black,
       // out to ir (0.52 rad) it is the iris with radial fibres, beyond that the veined white.
       float th=acos(clamp(q.z,-1.,1.)),ph=atan(q.y,q.x),pu=uPupil,ir=.52;
-      float aw=1.-smoothstep(.5,1.5,72.*pw*t/max(length(p.xy),.06)),f1=mix(.5,.5+.5*sin(ph*72.+h.y*40.),aw),f2=mix(.5,.5+.5*sin(ph*29.-h.y*17.+th*12.),aw);
+      float aw=1.-smoothstep(.5,1.5,72.*pw*t/max(length(p.xy),.06)),f1=mix(.5,.5+.5*sin(ph*72.+th*9.),aw),f2=mix(.5,.5+.5*sin(ph*29.+th*12.),aw);
       float fib=f1*(.55+.45*f2),rad=smoothstep(pu,ir,th),cx=(th-pu-.04)*30.;
-      vec3 ic=mix(vec3(1.,.9,.45),vec3(.85,.2,.02),rad);
+      vec3 ic=mix(vec3(1.0,.02,.35),vec3(.45,.02,1.0),smoothstep(0.0,.35,rad)); ic=mix(ic,vec3(.0,1.0,.75),smoothstep(.25,.65,rad)); ic=mix(ic,vec3(.65,1.0,.02),smoothstep(.55,1.0,rad));
       ic=mix(ic,vec3(1.,.97,.75),.6*exp(-cx*cx));
       ic*=(.25+1.1*fib)*(1.-.85*smoothstep(ir-.09,ir,th));
-      float vein=smoothstep(.62,.95,.5+.5*sin(h.y*31.+ph*4.+sin(th*20.)));
+      float vein=smoothstep(.62,.95,.5+.5*sin(th*31.+ph*4.+sin(th*20.)));
       vec3 sc=mix(vec3(1.,.82,.5),vec3(1.,.3,.03),vein*.75);
       float im=1.-smoothstep(ir,ir+.03,th),pm=smoothstep(pu-.02,pu+.03,th);
       vec3 alb=mix(sc,ic,im)*pm;
