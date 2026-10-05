@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fractal Eye Live Wallpaper</string>
+    <string name="wallpaper_description">Animated fractal eye live wallpaper</string>
+    <string name="wallpaper_unavailable">Live wallpapers are not available on this device</string>
+</resources>

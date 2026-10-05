@@ -1,0 +1,59 @@
+plugins { id 'com.android.application' }
+
+// Данные подписи релиза лежат в keystore.properties (он в .gitignore, шаблон — keystore.properties.example).
+// Без этого файла release-сборка получается неподписанной, debug работает как обычно.
+def keystoreFile = rootProject.file('keystore.properties')
+def keystoreProps = new Properties()
+if (keystoreFile.exists()) {
+    keystoreFile.withInputStream { keystoreProps.load(it) }
+}
+
+android {
+    namespace 'com.fractaleye.wallpaper'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.fractaleye.wallpaper'
+        minSdk 23
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+    }
+
+    buildFeatures {
+        // Нужен BuildConfig.DEBUG для проверок GL только в debug-сборке (GlUtils.checkError).
+        buildConfig true
+    }
+
+    signingConfigs {
+        release {
+            if (keystoreFile.exists()) {
+                storeFile rootProject.file(keystoreProps['storeFile'])
+                storePassword keystoreProps['storePassword']
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
+            if (keystoreFile.exists()) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    // Только аннотации @NonNull / @Nullable, кода времени выполнения не добавляет.
+    implementation 'androidx.annotation:annotation:1.8.2'
+}

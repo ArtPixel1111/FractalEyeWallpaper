@@ -1,0 +1,19 @@
+*.iml
+.gradle/
+local.properties
+.idea/
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+.DS_Store
+
+# Готовые сборки и ключи подписи: не коммитим
+*.apk
+*.aab
+*.jks
+*.keystore
+keystore.properties
+
+gradle-8.9/
+gradle-8.9-bin.zip

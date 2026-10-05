@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fractal Eye Live Wallpaper</string>
+    <string name="wallpaper_description">Анимированный фрактальный глаз — живые обои</string>
+    <string name="wallpaper_unavailable">На этом устройстве живые обои недоступны</string>
+</resources>
